@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\BookingFormRequest;
 
+use Illuminate\Support\Facades\Validator;
 use App\Prenotazione;
+
+
 
 class PrenotazioniController extends Controller
 {
@@ -47,16 +51,18 @@ class PrenotazioniController extends Controller
      * @ param  \Illuminate\Http\Request  $request
      * @ return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookingFormRequest $request)
     {
+      $validated =$request->validated();
+
       $newPrenotazione= new Prenotazione();
 
-      $newPrenotazione->guest_full_name = $request->input('input_full_name');
-      $newPrenotazione->guest_credit_card = $request->input('input_card_number');
-      $newPrenotazione->room = $request->input('input_room');
-      $newPrenotazione->from_date = $request->input('input_from_date');
-      $newPrenotazione->to_date = $request->input('input_to_date');
-      $newPrenotazione->more_details = $request->input('input_details');;
+      $newPrenotazione->guest_full_name = $validated('input_full_name');
+      $newPrenotazione->guest_credit_card = $validated('input_card_number');
+      $newPrenotazione->room = $validated('input_room');
+      $newPrenotazione->from_date = $validated('input_from_date');
+      $newPrenotazione->to_date = $validated('input_to_date');
+      $newPrenotazione->more_details = $validated('input_details');;
 
       $newPrenotazione->save();
 
@@ -83,7 +89,8 @@ class PrenotazioniController extends Controller
      */
     public function edit($id)
     {
-        //
+        $prenotazione = Prenotazione::find($id);
+        return view('prenotazioni.edit', compact('prenotazione'));
     }
 
     /**
@@ -93,9 +100,23 @@ class PrenotazioniController extends Controller
      * @ param  int  $id
      * @ return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BookingFormRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        $oldPrenotazione = Prenotazione::find($id);
+
+        $oldPrenotazione->guest_full_name = $validated['input_full_name'];
+        $oldPrenotazione->guest_credit_card = $validated['input_card_number'];
+        $oldPrenotazione->room = $validated['input_room'];
+
+        $oldPrenotazione->from_date = $validated['input_from_date'];
+        $oldPrenotazione->to_date = $validated['input_to_date'];
+        $oldPrenotazione->more_details = $validated['input_details'];
+
+        $oldPrenotazione->save();
+
+        return view('prenotazioni.success');
     }
 
     /**

@@ -29,7 +29,8 @@
           <td>{{$prenotazione['room']}}</td>
           <td>{{$prenotazione['from_date']}}</td>
           <td>{{$prenotazione['to_date']}}</td>
-          <td> <a href="{{ route('prenotazioni.show', $prenotazione['id']) }}"> vai </a> </td>
+          <td> <a href="{{ route('prenotazioni.show', $prenotazione['id']) }}"> Vai </a> </td>
+          <td> <a href="{{ route('prenotazioni.edit', $prenotazione['id']) }}"> Aggiorna </a> </td>
 
       </tr>
 
